@@ -60,6 +60,7 @@ main {
 }
 
 .front {
+    transform: rotateY(0deg);
     z-index: 2;
 }
 
@@ -98,22 +99,38 @@ main {
     border-radius: 100px;
 }
 
-#pop-up-chosen-already {
-    position: absolute;
-    text-align: center;
-    padding: 0 2rem;
-    background-color: white;
-    border: 4px solid gray;
-    border-radius: 10px;
-    font-size: 2rem;
-    font-family: 'Caveat', cursive;
-    color: burlywood;
-}
-
-
 
 .hidden {
     display: none;
+}
+
+/* Shaking cards on failed matches and forbidden actions */
+.shake-effect {
+    animation-name: shake;
+    animation-duration: .5s;
+    animation-delay: .7s;
+    transform: translateX(0);
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translateX(4px);
+    }
+    20%, 80% {
+        transform: translateX(-4px);
+    }
+    30%, 70% {
+        transform: translateX(4px);
+    }
+    40%, 60% {
+        transform: translateX(-4px);
+    }
+    50% {
+        transform: translateX(0px);
+    }
+
+    
+
 }
 
 
