@@ -9,16 +9,43 @@ for (i = 0; i < cards.length; i++) {
     currentFlipper = flippers[i];
     let currentLoopIndex = i;
 
-    cards[i].addEventListener("click", function() {
-        choosingCards(currentLoopIndex);
-        matchingCards();        
+    cards[i].addEventListener("click", function() { 
+        chooseCards(currentLoopIndex);
+        matchCards();        
+        if (matchedCards.length == 2) {
+            document.getElementById("pop-up-restart").classList.toggle("hidden");
+        }
     })
 }
 
-// LIST OF FUNCTIONS
-function choosingCards(currentLoopIndex) {
+// Button to restart game
+document.getElementById("restart-button").addEventListener("click", function() {
+    document.getElementById("pop-up-restart").classList.toggle("hidden");
+    
+})
+
+// Game ends
+
+setCardValues();
+
+
+// ******************* LIST OF FUNCTIONS ******************* 
+function getRandomInt() {
+    let randomInt = Math.ceil(Math.random(1, 8) * 8);
+    return randomInt;    
+}
+
+function setCardValues() {
+    for (i = 0; i < 8; i++) {
+        cards[i].querySelector(".back").innerText = `${i+1}`;
+        cards[i+8].querySelector(".back").innerText = `${i+1}`;
+    }    
+    
+}
+
+function chooseCards(currentLoopIndex) {
     if ((chosenCards.length < 2) && (chosenCards.includes(cards[currentLoopIndex]) == false) && (matchedCards.includes(cards[currentLoopIndex]) == false)) {
-        flippers[currentLoopIndex].classList.toggle("flipped");
+        flipCard(currentLoopIndex);
         chosenCards.push(cards[currentLoopIndex]);
         console.log(chosenCards);
         } 
@@ -32,7 +59,7 @@ function choosingCards(currentLoopIndex) {
         }
 }
 
-function matchingCards() {
+function matchCards() {
     if (chosenCards.length == 2) {
         if ((chosenCards[0].getElementsByClassName("back")[0].innerHTML) == (chosenCards[1].getElementsByClassName("back")[0].innerHTML)) {
             console.log("MATCH!");
@@ -46,36 +73,41 @@ function matchingCards() {
             chosenCards.pop();
             chosenCards.pop();
         } else {
-            // When two cards don't match they SHAKE and FLIP BACK.
-            chosenCards[0].classList.toggle("shake-effect")
-            chosenCards[1].classList.toggle("shake-effect")
-
+            // When two cards don't match they shake and flip BACK.
+            chosenCards[0].classList.toggle("shake-effect");
+            chosenCards[1].classList.toggle("shake-effect");
+            
             setTimeout(function() {
-                flipCard(chosenCards[0].flipper);
-                flipCard(chosenCards[1].flipper);
-            }, 2000);
-            // chosenCards.pop();
-            // chosenCards.pop();
+            chosenCards[0].classList.toggle("shake-effect");
+            chosenCards[1].classList.toggle("shake-effect");
+            }, 2000)
+        
+            // Extracting card-IDs from the array, for each card to flip back
+            setTimeout(function() {
+            let firstChosenCardId = chosenCards[0].id;
+            let secondChosenCardId = chosenCards[1].id;
+
+            firstChosenCardId = firstChosenCardId.replace("card-", "");
+            secondChosenCardId = secondChosenCardId.replace("card-", "");
             
-            // Clearing chosenCards.
-            
+            flipCard(firstChosenCardId-1);
+            chosenCards.shift();
+            flipCard(secondChosenCardId-1);
+            chosenCards.shift();
+            }, 2000); 
+
         }
     }
 }
 
-function flipCard(currentCard) {
-    console.log("Currentcard is now:");
-    console.log(currentCard);
-    console.log("Flippers is now:");
-    console.log(flippers);
-    
-    flippers.classList.toggle("flipped");
+function flipCard(currentCardIndex) {
+    flippers[currentCardIndex].classList.toggle("flipped");
 }
 
-function shakeCard(currentCard) {
-    setTimeout(function() {cards[currentCard].classList.toggle("shake-effect")}, 1000);
+function shakeCard(currentCardIndex) {
+    setTimeout(function() {cards[currentCardIndex].classList.toggle("shake-effect")}, 1000);
     // Resets the shake-effect.
-    cards[currentCard].classList.toggle("shake-effect");
+    cards[currentCardIndex].classList.toggle("shake-effect");
 }
 
 

@@ -1,5 +1,14 @@
 // CODE THAT HAS BEEN REPLACED BY OTHER CODE
 
+// Extracting card-IDs from the array, for each card to flip back
+
+    for (i = 0; i < chosenCards.length; i++) {
+        let chosenCardId = chosenCards[i].id;
+        chosenCardId = chosenCardId.replace("card-", "");        
+        flipCard(chosenCardId-1);       
+    }
+
+
 // POPUP window
     // HTML
 <!-- Popup notifying user of forbidden actions etc -->
