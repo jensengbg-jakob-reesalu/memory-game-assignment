@@ -9,7 +9,7 @@ main {
     align-items: center;
 }
 
-#attemptsTag {
+#attempts-tag {
     margin: 1rem;
     font-family: 'Caveat', cursive;
     font-size: 2rem;

@@ -2,7 +2,12 @@ let cards = document.getElementsByClassName("flip-container");
 let flippers = document.getElementsByClassName("flipper");
 let chosenCards = [];
 let matchedCards = [];
+let matchedCardIds = [];
+let currentAttempts = 0;
 
+// At game start.
+setCardValues();
+getAttempts(currentAttempts);
 
 // Adding click events to cards (their flip-containers).
 for (i = 0; i < cards.length; i++) {
@@ -18,18 +23,33 @@ for (i = 0; i < cards.length; i++) {
     })
 }
 
-// Button to restart game
+// Game ending: displaying attempts and button to restart.
 document.getElementById("restart-button").addEventListener("click", function() {
     document.getElementById("pop-up-restart").classList.toggle("hidden");
     
+    // Extracts ID number from each card, so they can be sent to flipCard().
+    for (i = 0; i < matchedCards.length; i++) {    
+        matchedCardIds.push(matchedCards[i].id);
+        matchedCardIds[i] = matchedCardIds[i].replace("card-", ""); 
+        flipCard(matchedCardIds[i]-1);
+    }
+
+    // Clearing matchedCards[] for next round. 
+    for (i = 0; i < 2; i++) {
+        matchedCards.pop();
+    }
 })
 
-// Game ends
 
-setCardValues();
+
 
 
 // ******************* LIST OF FUNCTIONS ******************* 
+function getAttempts(attempts) {
+    let displayAttempts = document.getElementById("attempts-tag").innerText = `Attempts - ${attempts}`;
+    return displayAttempts;   
+}
+
 function getRandomInt() {
     let randomInt = Math.ceil(Math.random(1, 8) * 8);
     return randomInt;    
@@ -44,6 +64,8 @@ function setCardValues() {
 }
 
 function chooseCards(currentLoopIndex) {
+    getAttempts(currentAttempts);
+    
     if ((chosenCards.length < 2) && (chosenCards.includes(cards[currentLoopIndex]) == false) && (matchedCards.includes(cards[currentLoopIndex]) == false)) {
         flipCard(currentLoopIndex);
         chosenCards.push(cards[currentLoopIndex]);
@@ -61,6 +83,10 @@ function chooseCards(currentLoopIndex) {
 
 function matchCards() {
     if (chosenCards.length == 2) {
+        
+        currentAttempts++;
+        getAttempts(currentAttempts); 
+
         if ((chosenCards[0].getElementsByClassName("back")[0].innerHTML) == (chosenCards[1].getElementsByClassName("back")[0].innerHTML)) {
             console.log("MATCH!");
             console.log(chosenCards[0].getElementsByClassName("back")[0].innerHTML);
@@ -82,7 +108,7 @@ function matchCards() {
             chosenCards[1].classList.toggle("shake-effect");
             }, 2000)
         
-            // Extracting card-IDs from the array, for each card to flip back
+            // Extracting card-IDs from the array, for each card to flip back.
             setTimeout(function() {
             let firstChosenCardId = chosenCards[0].id;
             let secondChosenCardId = chosenCards[1].id;
