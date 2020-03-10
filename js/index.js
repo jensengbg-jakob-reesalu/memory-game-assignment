@@ -9,7 +9,7 @@ let cardPairs = [];
 // At game start.
 assignCards(); 
 console.log(assignCards());
-setCardValues();
+
 getAttempts(currentAttempts);
 
 
@@ -61,23 +61,46 @@ function getAttempts(attempts) {
     return displayAttempts;   
 }
 
-function setCardValues() {
-    for (i = 0; i < 8; i++) {
-        cards[i].querySelector(".back").innerText = `${i+1}`;
-        cards[i+8].querySelector(".back").innerText = `${i+1}`;
+let cardPositions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+let newShuffle = [];
+// arrayShuffle(cardPositions);
+newShuffle = arrayShuffle(cardPositions);
+setCardValues(newShuffle);
+
+function setCardValues(array) {
+    console.log("in cardValues");
+    console.log(array.length);
+    for (i = 0; i < array.length-1; i--) {
+        // console.log("i in loop:")
+        // console.log(i);
+        // cards[i].querySelector(".back").innerText = `${i+1}`;
+        // cards[i+8].querySelector(".back").innerText = `${i+1}`;
     }     
 }
 
-let cardsArray = [1, 2, 3, 4, 5, 6, 7, 8];
-let arrayShuffle = function(array) {
+function arrayShuffle(array) {
     let newArrayIndex;
-    let temporary; 
-    for (let i = array.length - 1; i > 0; i--) {
-        newArrayIndex = Math.floor(Math.random() * (i + 1));
-        temporary = array[i];
+    let temporaryHolder; 
+    // console.log("Array before shuffle:")
+    // console.log(array);
+    
+    for (i = array.length - 1; i > 0; i--) {
+        temporaryHolder = array[i];
+        // console.log("This element is now stored in Temp holder:");
+        // console.log(temporaryHolder);
+        newArrayIndex = Math.floor(Math.random() * (i + 1)); 
+        // console.log("New array index for the element is calculated:");
+        // console.log(newArrayIndex);
         array[i] = array[newArrayIndex];
-        array[newArrayIndex] = temporary;
+        // console.log("The element currently occupying new index overwrites the element. Old index now holds:");
+        // console.log(array[i]);
+        array[newArrayIndex] = temporaryHolder;
+        // console.log("Temp holder, holding the old element, is put into new index.");
+        // console.log(`So ${array[newArrayIndex]} has now moved to index ${newArrayIndex}`);
+        
     }
+    // console.log("Array after shuffle:")
+    // console.log(array);
     
     return array;
 };

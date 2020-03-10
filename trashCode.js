@@ -1,7 +1,34 @@
 // CODE THAT HAS BEEN REPLACED BY OTHER CODE
 
-// Extracting card-IDs from the array, for each card to flip back
+// arrayShuffle() including old console.logs
+function arrayShuffle(array) {
+    let newArrayIndex;
+    let temporaryHolder; 
+    console.log("Array before shuffle:")
+    console.log(array);
+    
+    for (i = array.length - 1; i > 0; i--) {
+        temporaryHolder = array[i];
+        console.log("This element is now stored in Temp holder:");
+        console.log(temporaryHolder);
+        newArrayIndex = Math.floor(Math.random() * (i + 1)); 
+        console.log("New array index for the element is calculated:");
+        console.log(newArrayIndex);
+        array[i] = array[newArrayIndex];
+        console.log("The element currently occupying new index overwrites the element. Old index now holds:");
+        console.log(array[i]);
+        array[newArrayIndex] = temporaryHolder;
+        console.log("Temp holder, holding the old element, is put into new index.");
+        console.log(`So ${array[newArrayIndex]} has now moved to index ${newArrayIndex}`);
+        
+    }
+    console.log("Array after shuffle:")
+    console.log(array);
+    
+    return array;
+};
 
+// Extracting card-IDs from the array, for each card to flip back
     for (i = 0; i < chosenCards.length; i++) {
         let chosenCardId = chosenCards[i].id;
         chosenCardId = chosenCardId.replace("card-", "");        
