@@ -1,19 +1,16 @@
 let cards = document.getElementsByClassName("flip-container");
+let cardContents = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
 let flippers = document.getElementsByClassName("flipper");
 let chosenCards = [];
 let matchedCards = [];
 let matchedCardIds = [];
 let currentAttempts = 0;
-let cardPairs = [];
+let attemptAddedOnce = false;
 
-// At game start.
-assignCards(); 
-console.log(assignCards());
 
+// Game starts.
 getAttempts(currentAttempts);
-
-
-
+setCardValues(cardContents);
 
 // Adding click events to cards (their flip-containers).
 for (i = 0; i < cards.length; i++) {
@@ -23,7 +20,7 @@ for (i = 0; i < cards.length; i++) {
     cards[i].addEventListener("click", function() { 
         chooseCards(currentLoopIndex);
         matchCards();        
-        if (matchedCards.length == 2) {
+        if (matchedCards.length == 16) {
             document.getElementById("pop-up-restart").classList.toggle("hidden");
             document.querySelector("#pop-up-restart p").innerHTML = `You made it in ${currentAttempts} attempts!`;
         }
@@ -42,7 +39,8 @@ document.getElementById("restart-button").addEventListener("click", function() {
     }
 
     // Clearing matchedCards[] for next round. 
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 16; i++) {
+        console.log("Removing from matchedCards:");
         matchedCards.pop();
     }
     
@@ -61,61 +59,32 @@ function getAttempts(attempts) {
     return displayAttempts;   
 }
 
-let cardPositions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-let newShuffle = [];
-// arrayShuffle(cardPositions);
-newShuffle = arrayShuffle(cardPositions);
-setCardValues(newShuffle);
-
 function setCardValues(array) {
-    console.log("in cardValues");
-    console.log(array.length);
-    for (i = 0; i < array.length-1; i--) {
-        // console.log("i in loop:")
-        // console.log(i);
-        // cards[i].querySelector(".back").innerText = `${i+1}`;
-        // cards[i+8].querySelector(".back").innerText = `${i+1}`;
+    let shuffledArray = arrayShuffle(array);
+    for (i = 0; i < shuffledArray.length; i++) {
+        cards[i].querySelector(".back").innerText = `${shuffledArray[i]}`;
     }     
 }
 
 function arrayShuffle(array) {
     let newArrayIndex;
     let temporaryHolder; 
-    // console.log("Array before shuffle:")
-    // console.log(array);
-    
+
     for (i = array.length - 1; i > 0; i--) {
         temporaryHolder = array[i];
-        // console.log("This element is now stored in Temp holder:");
-        // console.log(temporaryHolder);
         newArrayIndex = Math.floor(Math.random() * (i + 1)); 
-        // console.log("New array index for the element is calculated:");
-        // console.log(newArrayIndex);
         array[i] = array[newArrayIndex];
-        // console.log("The element currently occupying new index overwrites the element. Old index now holds:");
-        // console.log(array[i]);
         array[newArrayIndex] = temporaryHolder;
-        // console.log("Temp holder, holding the old element, is put into new index.");
-        // console.log(`So ${array[newArrayIndex]} has now moved to index ${newArrayIndex}`);
-        
     }
-    // console.log("Array after shuffle:")
-    // console.log(array);
     
     return array;
 };
 
-function assignCards() {
-  
-}
-
 function chooseCards(currentLoopIndex) {
-    getAttempts(currentAttempts);
-    
+    // getAttempts(currentAttempts);
     if ((chosenCards.length < 2) && (chosenCards.includes(cards[currentLoopIndex]) == false) && (matchedCards.includes(cards[currentLoopIndex]) == false)) {
         flipCard(currentLoopIndex);
         chosenCards.push(cards[currentLoopIndex]);
-        console.log(chosenCards);
         } 
         // If user clicks already CHOSEN card.
         else if (chosenCards.includes(cards[currentLoopIndex]) == true) {
@@ -127,11 +96,14 @@ function chooseCards(currentLoopIndex) {
         }
 }
 
+
 function matchCards() {
     if (chosenCards.length == 2) {
-        
-        currentAttempts++;
-        getAttempts(currentAttempts); 
+        if (attemptAddedOnce == false) {
+            attemptAddedOnce = true; 
+            currentAttempts++;
+            getAttempts(currentAttempts);
+        }
 
         if ((chosenCards[0].getElementsByClassName("back")[0].innerHTML) == (chosenCards[1].getElementsByClassName("back")[0].innerHTML)) {
             console.log("MATCH!");
@@ -152,6 +124,7 @@ function matchCards() {
             setTimeout(function() {
             chosenCards[0].classList.toggle("shake-effect");
             chosenCards[1].classList.toggle("shake-effect");
+            attemptAddedOnce = false; 
             }, 2000)
         
             // Extracting card-IDs from the array, for each card to flip back.
@@ -167,7 +140,6 @@ function matchCards() {
             flipCard(secondChosenCardId-1);
             chosenCards.shift();
             }, 2000); 
-
         }
     }
 }
