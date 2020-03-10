@@ -11,9 +11,10 @@ main {
 
 #attempts-tag {
     margin: 1rem;
-    font-family: 'Caveat', cursive;
+    font-family: 'dancing script', cursive;
     font-size: 2rem;
     color: #bbbbbb;   
+    user-select: none;
 }
 
 
@@ -34,11 +35,6 @@ main {
     transform-style: preserve-3d;
 }
 
-
-.flipped-permanently {
-    transform: rotateY(180deg);
-}
-
 .flipper {
     transition: .6s;
     transform-style: preserve-3d;
@@ -55,7 +51,7 @@ main {
     height: 8rem;
     width: 8rem;
     background-color: antiquewhite;
-    border: 2px solid gray;
+    border: 3px solid gray;
     border-radius: 5px;
 }
 
@@ -68,32 +64,36 @@ main {
     position: absolute;
     transform: rotateY(180deg);
     margin-top: 0;
+    font-size: 5rem;
+    color: rgb(88, 88, 88);
+    text-shadow: 2px 2px burlywood;
+    user-select: none;
 }
-
-
-
 
 .front p {
     font-size: 5rem;
     transform: rotate(23deg);
     color: burlywood;
     text-shadow: 2px 2px rgb(88, 88, 88);
+    user-select: none;
 }
 
 #pop-up-restart {
     position: absolute;
     text-align: center;
-    height: 10rem;
-    width: 20rem;
     background-color: white;
-    border: 2px solid gray;
+    box-shadow: 0 0 12px 0px rgba(0, 0, 0, .8);
     border-radius: 10px;
-    font-size: 2rem;
+    font-size: 1.6rem;
     color: burlywood;
 }
 
+#pop-up-restart p {
+    margin: 1rem;
+}
+
 #restart-button {
-    margin: auto;
+    margin: 1rem;
     height: 1.5rem;
     width: 6rem;
     border-radius: 100px;

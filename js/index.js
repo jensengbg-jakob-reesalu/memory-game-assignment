@@ -4,10 +4,16 @@ let chosenCards = [];
 let matchedCards = [];
 let matchedCardIds = [];
 let currentAttempts = 0;
+let cardPairs = [];
 
 // At game start.
+assignCards(); 
+console.log(assignCards());
 setCardValues();
 getAttempts(currentAttempts);
+
+
+
 
 // Adding click events to cards (their flip-containers).
 for (i = 0; i < cards.length; i++) {
@@ -19,6 +25,7 @@ for (i = 0; i < cards.length; i++) {
         matchCards();        
         if (matchedCards.length == 2) {
             document.getElementById("pop-up-restart").classList.toggle("hidden");
+            document.querySelector("#pop-up-restart p").innerHTML = `You made it in ${currentAttempts} attempts!`;
         }
     })
 }
@@ -38,6 +45,10 @@ document.getElementById("restart-button").addEventListener("click", function() {
     for (i = 0; i < 2; i++) {
         matchedCards.pop();
     }
+    
+    // Resetting attempts for next round.
+    currentAttempts = 0;
+    getAttempts(currentAttempts);
 })
 
 
@@ -50,17 +61,29 @@ function getAttempts(attempts) {
     return displayAttempts;   
 }
 
-function getRandomInt() {
-    let randomInt = Math.ceil(Math.random(1, 8) * 8);
-    return randomInt;    
-}
-
 function setCardValues() {
     for (i = 0; i < 8; i++) {
         cards[i].querySelector(".back").innerText = `${i+1}`;
         cards[i+8].querySelector(".back").innerText = `${i+1}`;
-    }    
+    }     
+}
+
+let cardsArray = [1, 2, 3, 4, 5, 6, 7, 8];
+let arrayShuffle = function(array) {
+    let newArrayIndex;
+    let temporary; 
+    for (let i = array.length - 1; i > 0; i--) {
+        newArrayIndex = Math.floor(Math.random() * (i + 1));
+        temporary = array[i];
+        array[i] = array[newArrayIndex];
+        array[newArrayIndex] = temporary;
+    }
     
+    return array;
+};
+
+function assignCards() {
+  
 }
 
 function chooseCards(currentLoopIndex) {
