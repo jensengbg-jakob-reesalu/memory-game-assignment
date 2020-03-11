@@ -12,42 +12,50 @@ let attemptAddedOnce = false;
 getAttempts(currentAttempts);
 setCardValues(cardContents);
 
-// Adding click events to cards (their flip-containers).
+/* Adding click events to cards (their flip-containers). 
+   When two cards have been chosen they are compared; 
+   if match they stay up, else they flip back. */
 for (i = 0; i < cards.length; i++) {
     currentFlipper = flippers[i];
     let currentLoopIndex = i;
 
     cards[i].addEventListener("click", function() { 
+        if (chosenCards.length != 2) {
         chooseCards(currentLoopIndex);
         matchCards();        
         if (matchedCards.length == 16) {
-            document.getElementById("pop-up-restart").classList.toggle("hidden");
+            togglePopUp("pop-up-restart");
             document.querySelector("#pop-up-restart p").innerHTML = `You made it in ${currentAttempts} attempts!`;
+        }
         }
     })
 }
 
-// Game ending: displaying attempts and button to restart.
+/* Game ends. 
+   Restart popup appears. */
 document.getElementById("restart-button").addEventListener("click", function() {
-    document.getElementById("pop-up-restart").classList.toggle("hidden");
-    
-    // Extracts ID number from each card, so they can be sent to flipCard().
+    togglePopUp("pop-up-restart");
+    // Flipping cards back. Extracts ID number from each card, so they can be sent to flipCard().
     for (i = 0; i < matchedCards.length; i++) {    
         matchedCardIds.push(matchedCards[i].id);
         matchedCardIds[i] = matchedCardIds[i].replace("card-", ""); 
         flipCard(matchedCardIds[i]-1);
     }
 
-    // Clearing matchedCards[] for next round. 
+    // Clearing matchedCards[] and matchedCardIds for next round. 
     for (i = 0; i < 16; i++) {
-        console.log("Removing from matchedCards:");
         matchedCards.pop();
+        matchedCardIds.pop();
     }
     
-    // Resetting attempts for next round.
+    // Resetting attempts and randomizes cards for next round.
     currentAttempts = 0;
     getAttempts(currentAttempts);
+    setTimeout(function() {
+        setCardValues(cardContents);
+    }, 1000);
 })
+
 
 
 
@@ -57,6 +65,10 @@ document.getElementById("restart-button").addEventListener("click", function() {
 function getAttempts(attempts) {
     let displayAttempts = document.getElementById("attempts-tag").innerText = `Attempts - ${attempts}`;
     return displayAttempts;   
+}
+
+function togglePopUp(elementId) {
+    document.getElementById(elementId).classList.toggle("hidden");
 }
 
 function setCardValues(array) {
@@ -69,89 +81,81 @@ function setCardValues(array) {
 function arrayShuffle(array) {
     let newArrayIndex;
     let temporaryHolder; 
-
     for (i = array.length - 1; i > 0; i--) {
         temporaryHolder = array[i];
         newArrayIndex = Math.floor(Math.random() * (i + 1)); 
         array[i] = array[newArrayIndex];
         array[newArrayIndex] = temporaryHolder;
     }
-    
     return array;
 };
 
+// For clicking on cards.
 function chooseCards(currentLoopIndex) {
-    // getAttempts(currentAttempts);
     if ((chosenCards.length < 2) && (chosenCards.includes(cards[currentLoopIndex]) == false) && (matchedCards.includes(cards[currentLoopIndex]) == false)) {
         flipCard(currentLoopIndex);
         chosenCards.push(cards[currentLoopIndex]);
         } 
-        // If user clicks already CHOSEN card.
-        else if (chosenCards.includes(cards[currentLoopIndex]) == true) {
+        // If user clicks already chosen or matched card.
+        else if ((chosenCards.includes(cards[currentLoopIndex])) || (matchedCards.includes(cards[currentLoopIndex]))) {
             shakeCard(currentLoopIndex);
         } 
-        // If user clicks already MATCHED card.
-        else if (matchedCards.includes(cards[currentLoopIndex])) {
-            shakeCard(currentLoopIndex);
-        }
 }
 
-
+// Checks for match when two cards are chosen.
 function matchCards() {
     if (chosenCards.length == 2) {
         if (attemptAddedOnce == false) {
-            attemptAddedOnce = true; 
             currentAttempts++;
             getAttempts(currentAttempts);
+            attemptAddedOnce = true; 
         }
-
         if ((chosenCards[0].getElementsByClassName("back")[0].innerHTML) == (chosenCards[1].getElementsByClassName("back")[0].innerHTML)) {
-            console.log("MATCH!");
-            console.log(chosenCards[0].getElementsByClassName("back")[0].innerHTML);
-            console.log(chosenCards[1].getElementsByClassName("back")[0].innerHTML);
-            
             // Saving matched cards, clearing chosenCards for next attempt. 
             matchedCards.push(chosenCards[0]);
             matchedCards.push(chosenCards[1]);
-    
             chosenCards.pop();
             chosenCards.pop();
-        } else {
-            // When two cards don't match they shake and flip BACK.
-            chosenCards[0].classList.toggle("shake-effect");
-            chosenCards[1].classList.toggle("shake-effect");
-            
-            setTimeout(function() {
-            chosenCards[0].classList.toggle("shake-effect");
-            chosenCards[1].classList.toggle("shake-effect");
             attemptAddedOnce = false; 
-            }, 2000)
-        
-            // Extracting card-IDs from the array, for each card to flip back.
-            setTimeout(function() {
-            let firstChosenCardId = chosenCards[0].id;
-            let secondChosenCardId = chosenCards[1].id;
-
-            firstChosenCardId = firstChosenCardId.replace("card-", "");
-            secondChosenCardId = secondChosenCardId.replace("card-", "");
-            
-            flipCard(firstChosenCardId-1);
-            chosenCards.shift();
-            flipCard(secondChosenCardId-1);
-            chosenCards.shift();
-            }, 2000); 
+        } else {
+            // Unmatching cards shake and flip back.
+            shakeCard(chosenCards);
+            flipCard(chosenCards);
+            attemptAddedOnce = false;
         }
     }
 }
 
-function flipCard(currentCardIndex) {
-    flippers[currentCardIndex].classList.toggle("flipped");
+function flipCard(cardIndex) {
+    if (Array.isArray(cardIndex)) {
+        let cardId1 = cardIndex[0].id.replace("card-", "") - 1;
+        let cardId2 = cardIndex[1].id.replace("card-", "") - 1;
+        setTimeout(function() {
+            flippers[cardId1].classList.toggle("flipped");
+            chosenCards.shift();
+            flippers[cardId2].classList.toggle("flipped");
+            chosenCards.shift();
+            }, 2000); 
+    } else {
+    flippers[cardIndex].classList.toggle("flipped");
+    }    
 }
 
-function shakeCard(currentCardIndex) {
-    setTimeout(function() {cards[currentCardIndex].classList.toggle("shake-effect")}, 1000);
+function shakeCard(cardIndex) {
+    if (Array.isArray(cardIndex)) {
+        let cardId1 = cardIndex[0].id.replace("card-", "") - 1;
+        let cardId2 = cardIndex[1].id.replace("card-", "") - 1;
+        setTimeout(function() {
+            cards[cardId1].classList.toggle("shake-effect");
+            cards[cardId2].classList.toggle("shake-effect");
+            }, 1000); 
+        cards[cardId1].classList.toggle("shake-effect");
+        cards[cardId2].classList.toggle("shake-effect");        
+    } else {
+    setTimeout(function() {cards[cardIndex].classList.toggle("shake-effect")}, 1000);
     // Resets the shake-effect.
-    cards[currentCardIndex].classList.toggle("shake-effect");
+    cards[cardIndex].classList.toggle("shake-effect");
+    }
 }
 
 

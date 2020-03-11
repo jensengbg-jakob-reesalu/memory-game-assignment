@@ -1,5 +1,32 @@
 // CODE THAT HAS BEEN REPLACED BY OTHER CODE
 
+// Old flip thing
+ flipCard(chosenCards[1].id);
+            setTimeout(function() {
+            let firstChosenCardId = chosenCards[0].id;
+            let secondChosenCardId = chosenCards[1].id;
+
+            firstChosenCardId = firstChosenCardId.replace("card-", "");
+            secondChosenCardId = secondChosenCardId.replace("card-", "");
+            
+            flipCard(firstChosenCardId-1);
+            chosenCards.shift();
+            flipCard(secondChosenCardId-1);
+            chosenCards.shift();
+            }, 2000); 
+
+// Shake before shakeCard()
+chosenCards[0].classList.toggle("shake-effect");
+            chosenCards[1].classList.toggle("shake-effect");
+            
+            Resetting the shake-effect class and attemptsAddedOnce. 
+            setTimeout(function() {
+            chosenCards[0].classList.toggle("shake-effect");
+            chosenCards[1].classList.toggle("shake-effect");
+            attemptAddedOnce = false; 
+            }, 2000)
+        
+
 // arrayShuffle() including old console.logs
 function arrayShuffle(array) {
     let newArrayIndex;
