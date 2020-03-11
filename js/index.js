@@ -8,13 +8,15 @@ let currentAttempts = 0;
 let attemptAddedOnce = false;
 
 
+
+
 // Game starts.
 getAttempts(currentAttempts);
 setCardValues(cardContents);
 
-/* Adding click events to cards (their flip-containers). 
-   When two cards have been chosen they are compared; 
-   if match they stay up, else they flip back. */
+// Adding click events to cards (their flip-containers). 
+// When two cards have been chosen they are compared; 
+// if match they stay up, else they flip back. 
 for (i = 0; i < cards.length; i++) {
     currentFlipper = flippers[i];
     let currentLoopIndex = i;
@@ -31,8 +33,8 @@ for (i = 0; i < cards.length; i++) {
     })
 }
 
-/* Game ends. 
-   Restart popup appears. */
+// Game ends. 
+// Restart popup appears.
 document.getElementById("restart-button").addEventListener("click", function() {
     togglePopUp("pop-up-restart");
     // Flipping cards back. Extracts ID number from each card, so they can be sent to flipCard().
@@ -41,7 +43,7 @@ document.getElementById("restart-button").addEventListener("click", function() {
         matchedCardIds[i] = matchedCardIds[i].replace("card-", ""); 
         flipCard(matchedCardIds[i]-1);
     }
-
+    
     // Clearing matchedCards[] and matchedCardIds for next round. 
     for (i = 0; i < 16; i++) {
         matchedCards.pop();
@@ -55,8 +57,6 @@ document.getElementById("restart-button").addEventListener("click", function() {
         setCardValues(cardContents);
     }, 1000);
 })
-
-
 
 
 
@@ -102,7 +102,7 @@ function chooseCards(currentLoopIndex) {
         } 
 }
 
-// Checks for match when two cards are chosen.
+// For checking match between two cards.
 function matchCards() {
     if (chosenCards.length == 2) {
         if (attemptAddedOnce == false) {
@@ -157,5 +157,3 @@ function shakeCard(cardIndex) {
     cards[cardIndex].classList.toggle("shake-effect");
     }
 }
-
-

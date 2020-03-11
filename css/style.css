@@ -11,33 +11,38 @@ main {
 
 #attempts-tag {
     margin: 1rem;
+    padding: 0.2rem 1rem;
+    color: #bbbbbb; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 5px solid ghostwhite;
     font-family: 'dancing script', cursive;
     font-size: 2rem;
-    color: #bbbbbb;   
     user-select: none;
 }
 
-
-/* The cards  */
 #card-wrapper {
     display: grid;
     grid-template-columns: auto auto auto auto;
     grid-template-rows: auto;
 }
 
-/* .flip-container:hover .flipper {
-    transform: rotateY(180deg);
-}  */
+.flipper {
+    display: flex;
+    height: 150px;
+    margin: .3rem;
+    background: ghostwhite;
+    border-radius: 5px;
+    box-shadow: 5px 5px 3px 0 rgba(0, 0, 0, 0.3);
+    transition: .6s;
+    transform-style: preserve-3d;
+}
 
 .flipped {
     transform: rotateY(180deg);
     transition: .6s;
     transform-style: preserve-3d;
-}
-
-.flipper {
-    transition: .6s;
-    transform-style: preserve-3d;
+    box-shadow: -5px 5px 3px 0 rgba(0, 0, 0, 0.3);
 }
 
 .front, .back {
@@ -51,7 +56,7 @@ main {
     height: 8rem;
     width: 8rem;
     background-color: antiquewhite;
-    border: 3px solid gray;
+    border: 3px solid rgb(177, 177, 177);
     border-radius: 5px;
 }
 
@@ -62,6 +67,7 @@ main {
 
 .back {
     position: absolute;
+    top: 0.5rem;
     transform: rotateY(180deg);
     margin-top: 0;
     font-size: 5rem;
@@ -98,7 +104,6 @@ main {
     width: 6rem;
     border-radius: 100px;
 }
-
 
 .hidden {
     display: none;
